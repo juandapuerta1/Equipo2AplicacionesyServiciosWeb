@@ -1,0 +1,47 @@
+name: CI - Verificar Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  verificar:
+    name: Verificar codigo, formato PEP 8 y conexion a la base de datos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el codigo del repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi sqlalchemy pydantic uvicorn psycopg2-binary pylint python-dotenv uv
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Verificar que el codigo compile
+        run: python -m compileall -q app/
+
+      - name: Verificar formato PEP 8 con Pylint
+        env:
+          PYTHONPATH: .
+        run: pylint --disable=C,R,W0611 --fail-under=5 app/
+
+      - name: Verificar que la app FastAPI se pueda importar
+        env:
+          PYTHONPATH: .
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          python -c "from app.main import app; print('Rutas registradas:', len(app.routes))"
+
+      - name: Verificar la conexion a la base de datos
+        env:
+          PYTHONPATH: .
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python scripts/verificar_bd.py
