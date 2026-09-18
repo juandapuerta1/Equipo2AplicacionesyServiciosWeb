@@ -1,15 +1,20 @@
 from fastapi import FastAPI
 from app.core.database import Base, engine
 
-# 1. Importar el router desde app.routers (contiene las rutas/endpoints)
+# Importes de Alejandro (Producto)
 from app.routers import producto as producto_router
-
-# 2. Importar el modelo desde app.models (para que SQLAlchemy cree las tablas)
 from app.models import producto as producto_model
 
+# Importes de main (Mascota y Citas)
+from app.routers import mascota
+from app.routers import citas
+
+# Esto crea las tablas en Neon automáticamente si no existen
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="API")
+app = FastAPI(title="API Equipo 2")
 
-# 3. Registrar el router correcto
+# Registrando los endpoints del CRUD de todos los integrantes
 app.include_router(producto_router.router)
+app.include_router(mascota.router)
+app.include_router(citas.router)
