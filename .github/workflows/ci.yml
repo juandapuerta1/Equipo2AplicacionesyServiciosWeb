@@ -22,7 +22,7 @@ jobs:
       - name: Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          pip install pylint fastapi sqlalchemy pydantic uvicorn psycopg2-binary
+          pip install fastapi sqlalchemy pydantic uvicorn psycopg2-binary pylint python-dotenv uv
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Verificar que el codigo compile
@@ -32,7 +32,7 @@ jobs:
         env:
           PYTHONPATH: .
         run: pylint --disable=C,R,W0611 --fail-under=5 app/
-        
+
       - name: Verificar que la app FastAPI se pueda importar
         env:
           PYTHONPATH: .
@@ -45,6 +45,3 @@ jobs:
           PYTHONPATH: .
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python scripts/verificar_bd.py
-
-          
-      
