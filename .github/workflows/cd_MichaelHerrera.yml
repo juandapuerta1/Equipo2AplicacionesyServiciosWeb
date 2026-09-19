@@ -1,0 +1,39 @@
+name: Continuous Deployment - Michael Herrera
+
+# Se dispara al hacer merge (push) a main y también a mano
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Evita que dos merges seguidos escriban en la base al mismo tiempo
+concurrency:
+  group: cd-main-michael
+  cancel-in-progress: false
+
+jobs:
+  migrar-y-sembrar:
+    name: Crear tablas nuevas y cargar datos base en Neon
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi sqlalchemy pydantic uvicorn psycopg2-binary python-dotenv uv
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Crear tablas nuevas y ejecutar el seeder
+        env:
+          PYTHONPATH: .
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python scripts/seed.py
