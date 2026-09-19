@@ -18,4 +18,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     sys.exit(main())
+=======
+    sys.exit(main())
+>>>>>>> origin/main
