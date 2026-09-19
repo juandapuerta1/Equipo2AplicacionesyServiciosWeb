@@ -7,7 +7,7 @@ on:
       - main
   workflow_dispatch:
 
-# Evita que dos merges seguidos escriban en la base al mismo tiempo
+# Evita que dos merges seguidos escriban en la base al mismo tiempo..
 concurrency:
   group: cd-main
   cancel-in-progress: false
