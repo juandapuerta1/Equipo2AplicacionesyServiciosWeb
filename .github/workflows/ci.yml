@@ -45,3 +45,13 @@ jobs:
           PYTHONPATH: .
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python scripts/verificar_bd.py
+      
+    
+      - name: Ejecutar pruebas automatizadas con Pytest
+        env:
+          PYTHONPATH: .
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: pytest
+
+      - name: Construir imagen Docker de la aplicacion
+        run: docker build -t app-fastapi:latest .
