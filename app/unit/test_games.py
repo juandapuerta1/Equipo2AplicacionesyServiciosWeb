@@ -53,7 +53,7 @@ def test_update_game_normal():
     assert response.status_code in [200, 404] # Dependiendo de si existe el ID 1
 
 
-#a
+#aaa
 # 8. PUT - Actualizar juego (Error - Datos incorrectos o ID inexistente)
 def test_update_game_error():
     payload = {"price": "precio_texto_invalido"}
