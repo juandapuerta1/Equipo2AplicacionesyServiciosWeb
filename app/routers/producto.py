@@ -41,7 +41,8 @@ def actualizar_producto(
 
 @router.delete("/{producto_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_producto(producto_id: int, db: Session = Depends(get_db)):
-    db_producto = producto_repo.delete_producto(db=db, producto_id=producto_id)
+    db_producto = producto_repo.get_producto_by_id(db, producto_id=producto_id)
     if not db_producto:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
+    producto_repo.delete_producto(db=db, producto_id=producto_id)
     return None

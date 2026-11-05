@@ -2,6 +2,7 @@ import time
 from sqlalchemy.exc import OperationalError
 from fastapi import FastAPI
 from app.core.database import Base, engine
+from fastapi.middleware.cors import CORSMiddleware
 
 # Import de tu módulo (Videojuegos)
 from app.routers import games
@@ -18,6 +19,21 @@ from app.routers import citas
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="API Equipo 2")
+
+# --- 2. CONFIGURACIÓN DE CORS ---
+origins = [
+    "http://localhost:4200",  # Permite tu cliente de Angular en desarrollo
+    "http://127.0.0.1:4200",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite GET, POST, PUT, DELETE, etc.
+    allow_headers=["*"],  # Permite todos los headers
+)
+# ---------------------------------
 
 # Bucle de reintentos para esperar a que PostgreSQL esté listo en Docker
 max_retries = 5
