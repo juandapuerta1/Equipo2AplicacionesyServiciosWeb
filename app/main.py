@@ -19,12 +19,14 @@ from app.routers import citas
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="API Equipo 2")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:4200"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 # Bucle de reintentos para esperar a que PostgreSQL esté listo en Docker
 max_retries = 5
 retry_interval = 2
