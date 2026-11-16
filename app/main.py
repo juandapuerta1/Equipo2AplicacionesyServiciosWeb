@@ -15,14 +15,13 @@ from app.models import producto as producto_model
 from app.routers import mascota
 from app.routers import citas
 
-# Esto crea las tablas en Neon automáticamente si no existen
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI(title="API Equipo 2")
 
+# Configuración CORS ajustada
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],
+    allow_origins=["*"], 
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
