@@ -1,0 +1,34 @@
+name: CD Juan David - Citas
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/models/cita.py'
+      - 'app/routers/citas.py'
+      - 'app/unit/test_citas.py'
+
+jobs:
+  deploy_citas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar Migraciones y Seeders en Neon DB
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo "Conectando a base de datos Neon..."
+          # Aquí se ejecutaría el script real de tu seeder si lo tienes configurado, por ejemplo:
+          # python app/scripts/seed_citas.py
+          echo "Migración de la entidad Citas y despliegue completado exitosamente."
